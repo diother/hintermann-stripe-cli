@@ -12,3 +12,11 @@ type Donation struct {
 	Fee         int
 	Net         int
 }
+
+type Payout struct {
+	ID      string
+	Created time.Time
+	Gross   int
+	Fee     int
+	Net     int
+}
