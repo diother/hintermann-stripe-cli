@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/diother/hintermann-stripe-cli/internal/dto"
-	"github.com/diother/hintermann-stripe-cli/internal/helpers"
+	"github.com/diother/hintermann-stripe-cli/internal/helper"
 	"github.com/signintech/gopdf"
 )
 
@@ -15,8 +15,8 @@ func GenerateMonthlyReport(monthlyReport *dto.MonthlyReportDTO, year int, month 
 		return "", err
 	}
 
-	path := helpers.MonthlyReportPath(year, month)
-	if err := helpers.EnsureDir(path); err != nil {
+	path := helper.MonthlyReportPath(year, month)
+	if err := helper.EnsureDir(path); err != nil {
 		return "", err
 	}
 	return path, pdf.WritePdf(path)

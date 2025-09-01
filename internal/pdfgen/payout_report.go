@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/diother/hintermann-stripe-cli/internal/dto"
-	"github.com/diother/hintermann-stripe-cli/internal/helpers"
+	"github.com/diother/hintermann-stripe-cli/internal/helper"
 	"github.com/signintech/gopdf"
 )
 
@@ -14,8 +14,8 @@ func GeneratePayoutReport(payoutReport *dto.PayoutReportDTO) (string, error) {
 		return "", err
 	}
 
-	path := helpers.PayoutReportPath(payoutReport.Payout.ID)
-	if err := helpers.EnsureDir(path); err != nil {
+	path := helper.PayoutReportPath(payoutReport.Payout.ID)
+	if err := helper.EnsureDir(path); err != nil {
 		return "", err
 	}
 	return path, pdf.WritePdf(path)
