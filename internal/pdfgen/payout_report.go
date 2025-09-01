@@ -3,11 +3,11 @@ package pdfgen
 import (
 	"fmt"
 
-	"github.com/diother/hintermann-stripe-cli/internal/models"
+	"github.com/diother/hintermann-stripe-cli/internal/dto"
 	"github.com/signintech/gopdf"
 )
 
-func GeneratePayoutReport(payoutReport *models.PayoutReportDTO) (pdf *gopdf.GoPdf, err error) {
+func GeneratePayoutReport(payoutReport *dto.PayoutReportDTO) (pdf *gopdf.GoPdf, err error) {
 	payout := payoutReport.Payout
 	items := payoutReport.Donations
 
@@ -124,7 +124,7 @@ func addPayoutReportFooter(pdf *gopdf.GoPdf, currentPage, pagesNeeded int) error
 	return nil
 }
 
-func addPayoutSummary(pdf *gopdf.GoPdf, payout *models.PayoutDTO) {
+func addPayoutSummary(pdf *gopdf.GoPdf, payout *dto.PayoutDTO) {
 	const startY = 211
 
 	setText(pdf, 81, startY+10, payout.ID)
@@ -160,7 +160,7 @@ func addPayoutTable(pdf *gopdf.GoPdf, startY float64) {
 	pdf.Line(marginLeft, startY+21.5, marginRight, startY+21.5)
 }
 
-func addPayoutItem(pdf *gopdf.GoPdf, item *models.DonationDTO, startY float64) {
+func addPayoutItem(pdf *gopdf.GoPdf, item *dto.DonationDTO, startY float64) {
 	setText(pdf, marginLeft, startY+16, item.ID)
 
 	setRightAlignedText(pdf, 367, startY, item.Gross)

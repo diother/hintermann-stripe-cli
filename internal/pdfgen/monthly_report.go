@@ -3,11 +3,11 @@ package pdfgen
 import (
 	"fmt"
 
-	"github.com/diother/hintermann-stripe-cli/internal/models"
+	"github.com/diother/hintermann-stripe-cli/internal/dto"
 	"github.com/signintech/gopdf"
 )
 
-func GenerateMonthlyReport(monthlyReport *models.MonthlyReportDTO) (pdf *gopdf.GoPdf, err error) {
+func GenerateMonthlyReport(monthlyReport *dto.MonthlyReportDTO) (pdf *gopdf.GoPdf, err error) {
 	payouts := monthlyReport.Payouts
 
 	pdf = &gopdf.GoPdf{}
@@ -126,7 +126,7 @@ func addMonthlyReportFooter(pdf *gopdf.GoPdf, currentPage, pagesNeeded int) erro
 	return nil
 }
 
-func addMonthlyPayoutSummary(pdf *gopdf.GoPdf, monthlyReport *models.MonthlyReportDTO) {
+func addMonthlyPayoutSummary(pdf *gopdf.GoPdf, monthlyReport *dto.MonthlyReportDTO) {
 	const startY = 211
 
 	setText(pdf, marginLeft, startY+26, monthlyReport.MonthStart+" - "+monthlyReport.MonthEnd)
@@ -160,7 +160,7 @@ func addMonthlyPayoutTable(pdf *gopdf.GoPdf, startY float64) {
 	pdf.Line(marginLeft, startY+21.5, marginRight, startY+21.5)
 }
 
-func addMonthlyPayoutProduct(pdf *gopdf.GoPdf, payout *models.PayoutDTO, startY float64) {
+func addMonthlyPayoutProduct(pdf *gopdf.GoPdf, payout *dto.PayoutDTO, startY float64) {
 	setText(pdf, marginLeft, startY+16, payout.Created)
 
 	setRightAlignedText(pdf, 367, startY, payout.Gross)

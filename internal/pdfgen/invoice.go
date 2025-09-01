@@ -3,11 +3,11 @@ package pdfgen
 import (
 	"fmt"
 
-	"github.com/diother/hintermann-stripe-cli/internal/models"
+	"github.com/diother/hintermann-stripe-cli/internal/dto"
 	"github.com/signintech/gopdf"
 )
 
-func GenerateInvoice(donation *models.DonationDTO) (pdf *gopdf.GoPdf, err error) {
+func GenerateInvoice(donation *dto.DonationDTO) (pdf *gopdf.GoPdf, err error) {
 	pdf = &gopdf.GoPdf{}
 	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
 	pdf.AddPage()
@@ -29,7 +29,7 @@ func GenerateInvoice(donation *models.DonationDTO) (pdf *gopdf.GoPdf, err error)
 	return
 }
 
-func addInvoiceHeader(pdf *gopdf.GoPdf, donation *models.DonationDTO) error {
+func addInvoiceHeader(pdf *gopdf.GoPdf, donation *dto.DonationDTO) error {
 	const startY = marginTop
 
 	if err := addImage(pdf, "./static/pdf/hintermann-logo.png", marginLeft, marginTop, 167, 17); err != nil {
@@ -84,7 +84,7 @@ func addInvoiceTable(pdf *gopdf.GoPdf) {
 	pdf.Line(marginLeft, startY+21.5, marginRight, startY+21.5)
 }
 
-func addInvoiceProduct(pdf *gopdf.GoPdf, donation *models.DonationDTO) {
+func addInvoiceProduct(pdf *gopdf.GoPdf, donation *dto.DonationDTO) {
 	const startY = 237
 
 	setText(pdf, marginLeft, startY+16, "Fiecare donație contribuie la transformarea")
@@ -101,7 +101,7 @@ func addInvoiceProduct(pdf *gopdf.GoPdf, donation *models.DonationDTO) {
 	pdf.SetTextColor(94, 100, 112)
 }
 
-func addInvoiceSummary(pdf *gopdf.GoPdf, donation *models.DonationDTO) {
+func addInvoiceSummary(pdf *gopdf.GoPdf, donation *dto.DonationDTO) {
 	const startY = 311
 
 	setText(pdf, 312, startY+10, "Subtotal:")
