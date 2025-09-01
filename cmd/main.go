@@ -22,7 +22,7 @@ func main() {
 		DonationsFile: "data/donations.csv",
 		PayoutsFile:   "data/payouts.csv",
 	}
-	service := &service.ReportService{Repo: repo}
+	service := &service.ReportService{Reader: repo}
 
 	if *monthly {
 		report, err := service.GetMonthlyReport(*year, time.Month(*month))
