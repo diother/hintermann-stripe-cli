@@ -5,17 +5,16 @@ import (
 
 	"github.com/diother/hintermann-stripe-cli/internal/dto"
 	"github.com/diother/hintermann-stripe-cli/internal/model"
-	"github.com/diother/hintermann-stripe-cli/internal/repo"
 )
 
-type Repo interface {
+type Reader interface {
 	GetPayoutsByDateRange(start, end time.Time) ([]*model.Payout, error)
 	GetPayoutByID(id string) (*model.Payout, error)
 	GetDonationsByPayoutID(payoutID string) ([]*model.Donation, error)
 }
 
 type ReportService struct {
-	Repo *repo.CSVRepo
+	Repo Reader
 }
 
 func (s *ReportService) GetMonthlyReport(year int, month time.Month) (*dto.MonthlyReportDTO, error) {
