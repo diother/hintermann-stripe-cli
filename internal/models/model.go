@@ -1,8 +1,10 @@
 package models
 
+import "time"
+
 type Donation struct {
 	ID          string
-	Created     string
+	Created     time.Time
 	ClientName  string
 	ClientEmail string
 	PayoutID    string
@@ -11,7 +13,7 @@ type Donation struct {
 	Net         int
 }
 
-func NewDonation(id, created, clientName, clientEmail, payoutID string, gross, fee, net int) *Donation {
+func NewDonation(id string, created time.Time, clientName, clientEmail, payoutID string, gross, fee, net int) *Donation {
 	return &Donation{
 		ID:          id,
 		Created:     created,
@@ -26,13 +28,13 @@ func NewDonation(id, created, clientName, clientEmail, payoutID string, gross, f
 
 type Payout struct {
 	ID      string
-	Created string
+	Created time.Time
 	Gross   int
 	Fee     int
 	Net     int
 }
 
-func NewPayout(id, created string, gross, fee, net int) *Payout {
+func NewPayout(id string, created time.Time, gross, fee, net int) *Payout {
 	return &Payout{
 		ID:      id,
 		Created: created,

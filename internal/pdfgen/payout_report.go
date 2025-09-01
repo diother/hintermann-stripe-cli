@@ -7,7 +7,7 @@ import (
 	"github.com/signintech/gopdf"
 )
 
-func GeneratePayoutReport(payoutReport *models.PayoutReport) (pdf *gopdf.GoPdf, err error) {
+func GeneratePayoutReport(payoutReport *models.PayoutReportDTO) (pdf *gopdf.GoPdf, err error) {
 	payout := payoutReport.Payout
 	items := payoutReport.Donations
 
@@ -124,12 +124,8 @@ func addPayoutReportFooter(pdf *gopdf.GoPdf, currentPage, pagesNeeded int) error
 	return nil
 }
 
-func addPayoutSummary(pdf *gopdf.GoPdf, payout *models.Payout) {
+func addPayoutSummary(pdf *gopdf.GoPdf, payout *models.PayoutDTO) {
 	const startY = 211
-
-	payoutGross := fmt.Sprintf("%.2f lei", float64(payout.Gross)/100)
-	payoutFee := fmt.Sprintf("%.2f lei", float64(payout.Fee)/100)
-	payoutNet := fmt.Sprintf("%.2f lei", float64(payout.Net)/100)
 
 	setText(pdf, 81, startY+10, payout.ID)
 	setText(pdf, 112, startY+26, payout.Created)
@@ -137,8 +133,8 @@ func addPayoutSummary(pdf *gopdf.GoPdf, payout *models.Payout) {
 	setText(pdf, 312, startY+10, "Preț brut:")
 	setText(pdf, 312, startY+26, "Taxe Stripe:")
 
-	setRightAlignedText(pdf, marginRight, startY+10, payoutGross)
-	setRightAlignedText(pdf, marginRight, startY+26, "-"+payoutFee)
+	setRightAlignedText(pdf, marginRight, startY+10, payout.Gross)
+	setRightAlignedText(pdf, marginRight, startY+26, "-"+payout.Fee)
 
 	pdf.SetTextColor(0, 0, 0)
 	setText(pdf, marginLeft, startY+10, "ID plată:")
@@ -146,7 +142,7 @@ func addPayoutSummary(pdf *gopdf.GoPdf, payout *models.Payout) {
 
 	pdf.SetFont("Roboto-Bold", "", 10)
 	setText(pdf, 312, startY+42, "Total:")
-	setRightAlignedText(pdf, marginRight, startY+42, payoutNet)
+	setRightAlignedText(pdf, marginRight, startY+42, payout.Net)
 
 	resetTextStyles(pdf)
 
@@ -164,19 +160,15 @@ func addPayoutTable(pdf *gopdf.GoPdf, startY float64) {
 	pdf.Line(marginLeft, startY+21.5, marginRight, startY+21.5)
 }
 
-func addPayoutItem(pdf *gopdf.GoPdf, item *models.Donation, startY float64) {
+func addPayoutItem(pdf *gopdf.GoPdf, item *models.DonationDTO, startY float64) {
 	setText(pdf, marginLeft, startY+16, item.ID)
 
-	itemGross := fmt.Sprintf("%.2f lei", float64(item.Gross)/100)
-	itemFee := fmt.Sprintf("%.2f lei", float64(item.Fee)/100)
-	itemNet := fmt.Sprintf("%.2f lei", float64(item.Net)/100)
+	setRightAlignedText(pdf, 367, startY, item.Gross)
+	setRightAlignedText(pdf, 474, startY, "-"+item.Fee)
 
-	setRightAlignedText(pdf, 367, startY, itemGross)
-	setRightAlignedText(pdf, 474, startY, "-"+itemFee)
-
-	setRightAlignedText(pdf, marginRight, startY, itemNet)
+	setRightAlignedText(pdf, marginRight, startY, item.Net)
 	pdf.SetTextColor(0, 0, 0)
-	productName := "Donație de " + itemGross
+	productName := "Donație de " + item.Gross
 
 	setText(pdf, marginLeft, startY, productName)
 	pdf.SetTextColor(94, 100, 112)

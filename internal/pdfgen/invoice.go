@@ -7,7 +7,7 @@ import (
 	"github.com/signintech/gopdf"
 )
 
-func GenerateInvoice(donation *models.Donation) (pdf *gopdf.GoPdf, err error) {
+func GenerateInvoice(donation *models.DonationDTO) (pdf *gopdf.GoPdf, err error) {
 	pdf = &gopdf.GoPdf{}
 	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
 	pdf.AddPage()
@@ -29,7 +29,7 @@ func GenerateInvoice(donation *models.Donation) (pdf *gopdf.GoPdf, err error) {
 	return
 }
 
-func addInvoiceHeader(pdf *gopdf.GoPdf, donation *models.Donation) error {
+func addInvoiceHeader(pdf *gopdf.GoPdf, donation *models.DonationDTO) error {
 	const startY = marginTop
 
 	if err := addImage(pdf, "./static/pdf/hintermann-logo.png", marginLeft, marginTop, 167, 17); err != nil {
@@ -84,10 +84,8 @@ func addInvoiceTable(pdf *gopdf.GoPdf) {
 	pdf.Line(marginLeft, startY+21.5, marginRight, startY+21.5)
 }
 
-func addInvoiceProduct(pdf *gopdf.GoPdf, donation *models.Donation) {
+func addInvoiceProduct(pdf *gopdf.GoPdf, donation *models.DonationDTO) {
 	const startY = 237
-
-	gross := fmt.Sprintf("%.2f lei", float64(donation.Gross)/100)
 
 	setText(pdf, marginLeft, startY+16, "Fiecare donație contribuie la transformarea")
 	setText(pdf, marginLeft, startY+29, "vieților familiilor românești aflate în mare nevoie.")
@@ -95,34 +93,32 @@ func addInvoiceProduct(pdf *gopdf.GoPdf, donation *models.Donation) {
 
 	setText(pdf, 347, startY, "1")
 
-	setRightAlignedText(pdf, 466, startY, gross)
-	setRightAlignedText(pdf, marginRight, startY, gross)
+	setRightAlignedText(pdf, 466, startY, donation.Gross)
+	setRightAlignedText(pdf, marginRight, startY, donation.Gross)
 
 	pdf.SetTextColor(0, 0, 0)
-	setText(pdf, marginLeft, startY, "Donație de "+gross)
+	setText(pdf, marginLeft, startY, "Donație de "+donation.Gross)
 	pdf.SetTextColor(94, 100, 112)
 }
 
-func addInvoiceSummary(pdf *gopdf.GoPdf, donation *models.Donation) {
+func addInvoiceSummary(pdf *gopdf.GoPdf, donation *models.DonationDTO) {
 	const startY = 311
-
-	gross := fmt.Sprintf("%.2f lei", float64(donation.Gross)/100)
 
 	setText(pdf, 312, startY+10, "Subtotal:")
 	setText(pdf, 312, startY+32, "TVA:")
 	setText(pdf, 312, startY+86, "Debitat din plata dvs.:")
 
-	setRightAlignedText(pdf, marginRight, startY+10, gross)
+	setRightAlignedText(pdf, marginRight, startY+10, donation.Gross)
 
 	setText(pdf, 522, startY+32, "0.00 lei")
 
-	setRightAlignedText(pdf, marginRight, startY+86, "-"+gross)
+	setRightAlignedText(pdf, marginRight, startY+86, "-"+donation.Gross)
 
 	pdf.SetFont("Roboto-Bold", "", 10)
 	pdf.SetTextColor(0, 0, 0)
 	setText(pdf, 312, startY+64, "Total:")
 
-	setRightAlignedText(pdf, marginRight, startY+64, gross)
+	setRightAlignedText(pdf, marginRight, startY+64, donation.Gross)
 
 	setText(pdf, 312, startY+118, "Sumă datorată:")
 	setText(pdf, 521, startY+118, "0.00 lei")
