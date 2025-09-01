@@ -20,7 +20,7 @@ type DonationDTO struct {
 func FromDonation(donation *model.Donation) *DonationDTO {
 	return &DonationDTO{
 		ID:          donation.ID,
-		Created:     donation.Created.Format("2006-01-02"),
+		Created:     donation.Created.Format("2 Jan 2006"),
 		ClientName:  donation.ClientName,
 		ClientEmail: donation.ClientEmail,
 		PayoutID:    donation.PayoutID,

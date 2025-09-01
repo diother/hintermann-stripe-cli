@@ -17,7 +17,7 @@ type PayoutDTO struct {
 func FromPayout(payout *model.Payout) *PayoutDTO {
 	return &PayoutDTO{
 		ID:      payout.ID,
-		Created: payout.Created.Format("2006-01-02"),
+		Created: payout.Created.Format("2 Jan 2006"),
 		Gross:   fmt.Sprintf("%.2f lei", float64(payout.Gross)/100),
 		Fee:     fmt.Sprintf("%.2f lei", float64(payout.Fee)/100),
 		Net:     fmt.Sprintf("%.2f lei", float64(payout.Net)/100),
