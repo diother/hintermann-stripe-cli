@@ -27,7 +27,7 @@ func (r *CSVRepo) GetPayoutsByDateRange(start, end time.Time) ([]*model.Payout, 
 			filtered = append(filtered, p)
 		}
 	}
-	if len(payouts) == 0 {
+	if len(filtered) == 0 {
 		return nil, fmt.Errorf("no payouts found for %d-%02d", start.Year(), start.Month())
 	}
 	return filtered, nil
