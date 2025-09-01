@@ -9,13 +9,3 @@ type Payout struct {
 	Fee     int
 	Net     int
 }
-
-func NewPayout(id string, created time.Time, gross, fee, net int) *Payout {
-	return &Payout{
-		ID:      id,
-		Created: created,
-		Gross:   gross,
-		Fee:     fee,
-		Net:     net,
-	}
-}

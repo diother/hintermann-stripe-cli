@@ -1,5 +1,10 @@
 package dto
 
+import (
+	"fmt"
+	"time"
+)
+
 type MonthlyReportDTO struct {
 	MonthStart string
 	MonthEnd   string
@@ -10,14 +15,18 @@ type MonthlyReportDTO struct {
 	Payouts    []*PayoutDTO
 }
 
-func NewMonthlyReportDTO(monthStart, monthEnd, issued, gross, fee, net string, payouts []*PayoutDTO) *MonthlyReportDTO {
+func FromDateTotalsAndPayoutDTOs(date time.Time, gross, fee, net int, payoutDTOs []*PayoutDTO) *MonthlyReportDTO {
+	start := date
+	end := date.AddDate(0, 1, -1)
+	issued := date.AddDate(0, 1, 0)
+
 	return &MonthlyReportDTO{
-		MonthStart: monthStart,
-		MonthEnd:   monthEnd,
-		Issued:     issued,
-		Gross:      gross,
-		Fee:        fee,
-		Net:        net,
-		Payouts:    payouts,
+		MonthStart: start.Format("2006-01-02"),
+		MonthEnd:   end.Format("2006-01-02"),
+		Issued:     issued.Format("2006-01-02"),
+		Gross:      fmt.Sprintf("%.2f lei", float64(gross)/100),
+		Fee:        fmt.Sprintf("%.2f lei", float64(fee)/100),
+		Net:        fmt.Sprintf("%.2f lei", float64(net)/100),
+		Payouts:    payoutDTOs,
 	}
 }

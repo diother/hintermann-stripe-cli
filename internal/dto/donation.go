@@ -1,5 +1,11 @@
 package dto
 
+import (
+	"fmt"
+
+	"github.com/diother/hintermann-stripe-cli/internal/model"
+)
+
 type DonationDTO struct {
 	ID          string
 	Created     string
@@ -11,15 +17,23 @@ type DonationDTO struct {
 	Net         string
 }
 
-func NewDonationDTO(id, created, clientName, clientEmail, payoutID, gross, fee, net string) *DonationDTO {
+func FromDonation(donation *model.Donation) *DonationDTO {
 	return &DonationDTO{
-		ID:          id,
-		Created:     created,
-		ClientName:  clientName,
-		ClientEmail: clientEmail,
-		PayoutID:    payoutID,
-		Gross:       gross,
-		Fee:         fee,
-		Net:         net,
+		ID:          donation.ID,
+		Created:     donation.Created.Format("2006-01-02"),
+		ClientName:  donation.ClientName,
+		ClientEmail: donation.ClientEmail,
+		PayoutID:    donation.PayoutID,
+		Gross:       fmt.Sprintf("%.2f lei", float64(donation.Gross)/100),
+		Fee:         fmt.Sprintf("%.2f lei", float64(donation.Fee)/100),
+		Net:         fmt.Sprintf("%.2f lei", float64(donation.Net)/100),
 	}
+}
+
+func FromDonations(donations []*model.Donation) []*DonationDTO {
+	donationDTOs := make([]*DonationDTO, len(donations))
+	for i, d := range donations {
+		donationDTOs[i] = FromDonation(d)
+	}
+	return donationDTOs
 }
