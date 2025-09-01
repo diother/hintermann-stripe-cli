@@ -8,8 +8,8 @@ import (
 	"github.com/signintech/gopdf"
 )
 
-func SavePayoutReport(payoutReport *dto.PayoutReportDTO) (string, error) {
-	pdf, err := GeneratePayoutReport(payoutReport)
+func GeneratePayoutReport(payoutReport *dto.PayoutReportDTO) (string, error) {
+	pdf, err := renderPayoutReport(payoutReport)
 	if err != nil {
 		return "", err
 	}
@@ -21,7 +21,7 @@ func SavePayoutReport(payoutReport *dto.PayoutReportDTO) (string, error) {
 	return path, pdf.WritePdf(path)
 }
 
-func GeneratePayoutReport(payoutReport *dto.PayoutReportDTO) (pdf *gopdf.GoPdf, err error) {
+func renderPayoutReport(payoutReport *dto.PayoutReportDTO) (pdf *gopdf.GoPdf, err error) {
 	payout := payoutReport.Payout
 	items := payoutReport.Donations
 

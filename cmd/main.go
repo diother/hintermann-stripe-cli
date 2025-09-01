@@ -25,28 +25,28 @@ func main() {
 	service := &service.ReportService{Repo: repo}
 
 	if *monthly {
-		report, err := service.GenerateMonthlyReport(*year, time.Month(*month))
+		report, err := service.GetMonthlyReport(*year, time.Month(*month))
 		if err != nil {
 			log.Fatal(err)
 		}
-		path, err := pdfgen.SaveMonthlyReport(report, *year, time.Month(*month))
+		path, err := pdfgen.GenerateMonthlyReport(report, *year, time.Month(*month))
 		if err != nil {
 			log.Fatal(err)
 		}
 		fmt.Println("Monthly report generated:", path)
 	} else if *payoutID != "" {
-		payoutReport, donationDTOs, err := service.GeneratePayoutReport(*payoutID)
+		payoutReport, donationDTOs, err := service.GetPayoutReport(*payoutID)
 		if err != nil {
 			log.Fatal(err)
 		}
-		path, err := pdfgen.SavePayoutReport(payoutReport)
+		path, err := pdfgen.GeneratePayoutReport(payoutReport)
 		if err != nil {
 			log.Fatal(err)
 		}
 		fmt.Println("Payout report generated:", path)
 
 		for _, inv := range donationDTOs {
-			pdfgen.SaveInvoice(inv)
+			pdfgen.GenerateInvoice(inv)
 			if err != nil {
 				log.Fatal(err)
 			}

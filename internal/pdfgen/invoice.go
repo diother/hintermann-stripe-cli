@@ -8,8 +8,8 @@ import (
 	"github.com/signintech/gopdf"
 )
 
-func SaveInvoice(donation *dto.DonationDTO) (string, error) {
-	pdf, err := GenerateInvoice(donation)
+func GenerateInvoice(donation *dto.DonationDTO) (string, error) {
+	pdf, err := renderInvoice(donation)
 	if err != nil {
 		return "", err
 	}
@@ -21,7 +21,7 @@ func SaveInvoice(donation *dto.DonationDTO) (string, error) {
 	return path, pdf.WritePdf(path)
 }
 
-func GenerateInvoice(donation *dto.DonationDTO) (pdf *gopdf.GoPdf, err error) {
+func renderInvoice(donation *dto.DonationDTO) (pdf *gopdf.GoPdf, err error) {
 	pdf = &gopdf.GoPdf{}
 	pdf.Start(gopdf.Config{PageSize: *gopdf.PageSizeA4})
 	pdf.AddPage()

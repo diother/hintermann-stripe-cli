@@ -9,8 +9,8 @@ import (
 	"github.com/signintech/gopdf"
 )
 
-func SaveMonthlyReport(monthlyReport *dto.MonthlyReportDTO, year int, month time.Month) (string, error) {
-	pdf, err := GenerateMonthlyReport(monthlyReport)
+func GenerateMonthlyReport(monthlyReport *dto.MonthlyReportDTO, year int, month time.Month) (string, error) {
+	pdf, err := renderMonthlyReport(monthlyReport)
 	if err != nil {
 		return "", err
 	}
@@ -22,7 +22,7 @@ func SaveMonthlyReport(monthlyReport *dto.MonthlyReportDTO, year int, month time
 	return path, pdf.WritePdf(path)
 }
 
-func GenerateMonthlyReport(monthlyReport *dto.MonthlyReportDTO) (pdf *gopdf.GoPdf, err error) {
+func renderMonthlyReport(monthlyReport *dto.MonthlyReportDTO) (pdf *gopdf.GoPdf, err error) {
 	payouts := monthlyReport.Payouts
 
 	pdf = &gopdf.GoPdf{}

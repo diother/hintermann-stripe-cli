@@ -18,7 +18,7 @@ type ReportService struct {
 	Repo *repo.CSVRepo
 }
 
-func (s *ReportService) GenerateMonthlyReport(year int, month time.Month) (*dto.MonthlyReportDTO, error) {
+func (s *ReportService) GetMonthlyReport(year int, month time.Month) (*dto.MonthlyReportDTO, error) {
 	start, end := getDateRange(year, month)
 
 	payouts, err := s.Repo.GetPayoutsByDateRange(start, end)
@@ -32,7 +32,7 @@ func (s *ReportService) GenerateMonthlyReport(year int, month time.Month) (*dto.
 	return dto.FromDateTotalsAndPayoutDTOs(start, gross, fee, net, payoutDTOs), nil
 }
 
-func (s *ReportService) GeneratePayoutReport(payoutID string) (*dto.PayoutReportDTO, []*dto.DonationDTO, error) {
+func (s *ReportService) GetPayoutReport(payoutID string) (*dto.PayoutReportDTO, []*dto.DonationDTO, error) {
 	payout, err := s.Repo.GetPayoutByID(payoutID)
 	if err != nil {
 		return nil, nil, err
