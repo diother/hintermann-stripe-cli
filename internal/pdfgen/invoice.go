@@ -4,8 +4,22 @@ import (
 	"fmt"
 
 	"github.com/diother/hintermann-stripe-cli/internal/dto"
+	"github.com/diother/hintermann-stripe-cli/internal/helpers"
 	"github.com/signintech/gopdf"
 )
+
+func SaveInvoice(donation *dto.DonationDTO) (string, error) {
+	pdf, err := GenerateInvoice(donation)
+	if err != nil {
+		return "", err
+	}
+
+	path := helpers.InvoicePath(donation.PayoutID, donation.ID)
+	if err := helpers.EnsureDir(path); err != nil {
+		return "", err
+	}
+	return path, pdf.WritePdf(path)
+}
 
 func GenerateInvoice(donation *dto.DonationDTO) (pdf *gopdf.GoPdf, err error) {
 	pdf = &gopdf.GoPdf{}

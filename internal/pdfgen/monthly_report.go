@@ -2,10 +2,25 @@ package pdfgen
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/diother/hintermann-stripe-cli/internal/dto"
+	"github.com/diother/hintermann-stripe-cli/internal/helpers"
 	"github.com/signintech/gopdf"
 )
+
+func SaveMonthlyReport(monthlyReport *dto.MonthlyReportDTO, year int, month time.Month) (string, error) {
+	pdf, err := GenerateMonthlyReport(monthlyReport)
+	if err != nil {
+		return "", err
+	}
+
+	path := helpers.MonthlyReportPath(year, month)
+	if err := helpers.EnsureDir(path); err != nil {
+		return "", err
+	}
+	return path, pdf.WritePdf(path)
+}
 
 func GenerateMonthlyReport(monthlyReport *dto.MonthlyReportDTO) (pdf *gopdf.GoPdf, err error) {
 	payouts := monthlyReport.Payouts
