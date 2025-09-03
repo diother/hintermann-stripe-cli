@@ -14,13 +14,13 @@ type Reader interface {
 }
 
 type ReportService struct {
-	Reader Reader
+	Repo Reader
 }
 
 func (s *ReportService) GetMonthlyReport(year int, month time.Month) (*dto.MonthlyReportDTO, error) {
 	start, end := getDateRange(year, month)
 
-	payouts, err := s.Reader.GetPayoutsByDateRange(start, end)
+	payouts, err := s.Repo.GetPayoutsByDateRange(start, end)
 	if err != nil {
 		return nil, err
 	}
@@ -32,12 +32,12 @@ func (s *ReportService) GetMonthlyReport(year int, month time.Month) (*dto.Month
 }
 
 func (s *ReportService) GetPayoutReport(payoutID string) (*dto.PayoutReportDTO, []*dto.DonationDTO, error) {
-	payout, err := s.Reader.GetPayoutByID(payoutID)
+	payout, err := s.Repo.GetPayoutByID(payoutID)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	donations, err := s.Reader.GetDonationsByPayoutID(payoutID)
+	donations, err := s.Repo.GetDonationsByPayoutID(payoutID)
 	if err != nil {
 		return nil, nil, err
 	}

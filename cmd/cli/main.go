@@ -18,11 +18,8 @@ func main() {
 	month := flag.Int("month", int(time.Now().Month()), "Month for monthly report")
 	flag.Parse()
 
-	repo := &repo.CSVRepo{
-		DonationsFile: "data/donations.csv",
-		PayoutsFile:   "data/payouts.csv",
-	}
-	service := &service.ReportService{Reader: repo}
+	repo := &repo.CSVRepo{}
+	service := &service.ReportService{Repo: repo}
 
 	if *monthly {
 		report, err := service.GetMonthlyReport(*year, time.Month(*month))

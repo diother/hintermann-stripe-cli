@@ -10,10 +10,12 @@ import (
 	"github.com/diother/hintermann-stripe-cli/internal/model"
 )
 
-type CSVRepo struct {
-	DonationsFile string
-	PayoutsFile   string
-}
+const (
+	donationsFile = "data/donations.csv"
+	payoutsFile   = "data/payouts.csv"
+)
+
+type CSVRepo struct{}
 
 func (r *CSVRepo) GetPayoutsByDateRange(start, end time.Time) ([]*model.Payout, error) {
 	payouts, err := r.loadPayouts()
@@ -61,7 +63,7 @@ func (r *CSVRepo) GetDonationsByPayoutID(payoutID string) ([]*model.Donation, er
 }
 
 func (r *CSVRepo) loadDonations() ([]*model.Donation, error) {
-	file, err := os.Open(r.DonationsFile)
+	file, err := os.Open(donationsFile)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +104,7 @@ func (r *CSVRepo) loadDonations() ([]*model.Donation, error) {
 }
 
 func (r *CSVRepo) loadPayouts() ([]*model.Payout, error) {
-	file, err := os.Open(r.PayoutsFile)
+	file, err := os.Open(payoutsFile)
 	if err != nil {
 		return nil, err
 	}
