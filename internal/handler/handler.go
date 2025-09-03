@@ -38,7 +38,26 @@ func (h *WebhookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.Service.HandlePayoutReconciliation(body); err != nil {
+	var event struct {
+		Type string `json:"type"`
+		Data struct {
+			Object json.RawMessage `json:"object"`
+		} `json:"data"`
+	}
+
+	if err := json.Unmarshal(body, &event); err != nil {
+		http.Error(w, "service error", http.StatusInternalServerError)
+		log.Println(err)
+		return
+	}
+
+	if event.Type != "payout.reconciliation_completed" {
+		http.Error(w, "unrecognized event type", http.StatusBadRequest)
+		log.Println("unrecognized event:", event.Type)
+		return
+	}
+
+	if err := h.Service.HandlePayoutReconciliation(event.Data.Object); err != nil {
 		http.Error(w, "service error", http.StatusInternalServerError)
 		log.Println(err)
 		return
