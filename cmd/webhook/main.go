@@ -12,10 +12,13 @@ import (
 
 func main() {
 	repo := &repo.CSVRepo{}
-	service := &service.WebhookService{Repo: repo}
-	handler := &handler.WebhookHandler{
-		Service:      service,
+	service := &service.WebhookService{
+		Repo:         repo,
 		StripeSecret: "",
+	}
+	handler := &handler.WebhookHandler{
+		Service:       service,
+		WebhookSecret: "",
 	}
 
 	http.Handle("/webhook", handler)

@@ -10,8 +10,8 @@ type WebhookService interface {
 }
 
 type WebhookHandler struct {
-	Service      WebhookService
-	StripeSecret string
+	Service       WebhookService
+	WebhookSecret string
 }
 
 func (h *WebhookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {

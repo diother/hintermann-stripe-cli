@@ -8,7 +8,8 @@ type Writer interface {
 }
 
 type WebhookService struct {
-	Repo Writer
+	Repo         Writer
+	StripeSecret string
 }
 
 func (s *WebhookService) HandlePayoutReconciliation() error {
