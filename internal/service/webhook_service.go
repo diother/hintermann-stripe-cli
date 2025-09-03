@@ -1,6 +1,11 @@
 package service
 
-import "github.com/diother/hintermann-stripe-cli/internal/model"
+import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/diother/hintermann-stripe-cli/internal/model"
+)
 
 type Writer interface {
 	AppendDonation(d *model.Donation) error
@@ -12,6 +17,7 @@ type WebhookService struct {
 	StripeSecret string
 }
 
-func (s *WebhookService) HandlePayoutReconciliation() error {
+func (s *WebhookService) HandlePayoutReconciliation(object json.RawMessage) error {
+	fmt.Println(object)
 	return nil
 }
