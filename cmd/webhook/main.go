@@ -8,14 +8,14 @@ import (
 	"github.com/diother/hintermann-stripe-cli/internal/handler"
 	"github.com/diother/hintermann-stripe-cli/internal/repo"
 	"github.com/diother/hintermann-stripe-cli/internal/service"
+	"github.com/stripe/stripe-go/v79"
 )
 
 func main() {
+	stripe.Key = ""
+
 	repo := &repo.CSVRepo{}
-	service := &service.WebhookService{
-		Repo:         repo,
-		StripeSecret: "",
-	}
+	service := &service.WebhookService{Repo: repo}
 	handler := &handler.WebhookHandler{
 		Service:       service,
 		WebhookSecret: "",

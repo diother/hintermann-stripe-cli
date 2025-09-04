@@ -1,10 +1,10 @@
 package service
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/diother/hintermann-stripe-cli/internal/model"
+	"github.com/stripe/stripe-go/v79"
 )
 
 type Writer interface {
@@ -13,11 +13,28 @@ type Writer interface {
 }
 
 type WebhookService struct {
-	Repo         Writer
-	StripeSecret string
+	Repo Writer
 }
 
-func (s *WebhookService) HandlePayoutReconciliation(object json.RawMessage) error {
-	fmt.Println(object)
+func (s *WebhookService) HandlePayoutReconciliation(stripePayout *stripe.Payout) error {
+	if err := validatePayout(stripePayout); err != nil {
+		return fmt.Errorf("payout validation error: %w", err)
+	}
+	return nil
+}
+
+func validatePayout(payout *stripe.Payout) error {
+	if payout == nil {
+		return fmt.Errorf("missing")
+	}
+	if payout.ID == "" {
+		return fmt.Errorf("id missing")
+	}
+	if payout.Status != "paid" {
+		return fmt.Errorf("status invalid")
+	}
+	if payout.ReconciliationStatus != "completed" {
+		return fmt.Errorf("reconciliation status invalid")
+	}
 	return nil
 }

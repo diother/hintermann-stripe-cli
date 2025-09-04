@@ -1,18 +1,17 @@
 package handler
 
 import (
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
 	"io"
 	"log"
 	"net/http"
-	"strings"
+
+	"github.com/stripe/stripe-go/v79"
+	"github.com/stripe/stripe-go/v79/webhook"
 )
 
 type WebhookService interface {
-	HandlePayoutReconciliation(object json.RawMessage) error
+	HandlePayoutReconciliation(payout *stripe.Payout) error
 }
 
 type WebhookHandler struct {
@@ -32,22 +31,10 @@ func (h *WebhookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	sigHeader := r.Header.Get("Stripe-Signature")
-	if !validateStripeSignature(body, sigHeader, h.WebhookSecret) {
+	event, err := webhook.ConstructEvent(body, r.Header.Get("Stripe-Signature"), h.WebhookSecret)
+	if err != nil {
 		http.Error(w, "invalid signature", http.StatusBadRequest)
-		return
-	}
-
-	var event struct {
-		Type string `json:"type"`
-		Data struct {
-			Object json.RawMessage `json:"object"`
-		} `json:"data"`
-	}
-
-	if err := json.Unmarshal(body, &event); err != nil {
-		http.Error(w, "service error", http.StatusInternalServerError)
-		log.Println(err)
+		log.Println("invalid signature:", err)
 		return
 	}
 
@@ -57,33 +44,19 @@ func (h *WebhookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.Service.HandlePayoutReconciliation(event.Data.Object); err != nil {
+	payout := &stripe.Payout{}
+	if err = json.Unmarshal(event.Data.Raw, payout); err != nil {
+		http.Error(w, "unrecognized data object", http.StatusBadRequest)
+		log.Println("unrecognized data object:", err)
+		return
+	}
+
+	if err := h.Service.HandlePayoutReconciliation(payout); err != nil {
 		http.Error(w, "service error", http.StatusInternalServerError)
-		log.Println(err)
+		log.Println("service error:", err)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write([]byte("ok"))
-}
-
-func validateStripeSignature(payload []byte, sigHeader, secret string) bool {
-	var timestamp, signature string
-	parts := strings.Split(sigHeader, ",")
-	for _, p := range parts {
-		if strings.HasPrefix(p, "t=") {
-			timestamp = strings.TrimPrefix(p, "t=")
-		}
-		if strings.HasPrefix(p, "v1=") {
-			signature = strings.TrimPrefix(p, "v1=")
-		}
-	}
-
-	signedPayload := timestamp + "." + string(payload)
-
-	mac := hmac.New(sha256.New, []byte(secret))
-	mac.Write([]byte(signedPayload))
-	expected := hex.EncodeToString(mac.Sum(nil))
-
-	return hmac.Equal([]byte(expected), []byte(signature))
 }
