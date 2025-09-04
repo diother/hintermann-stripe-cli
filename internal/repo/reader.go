@@ -55,7 +55,7 @@ func (r *CSVRepo) GetDonationsByPayoutID(payoutID string) ([]*model.Donation, er
 	}
 	var filtered []*model.Donation
 	for _, d := range donations {
-		if d.PayoutID == payoutID {
+		if d.PayoutId == payoutID {
 			filtered = append(filtered, d)
 		}
 	}
@@ -89,11 +89,11 @@ func (r *CSVRepo) loadDonations() ([]*model.Donation, error) {
 		net, _ := parseInt(record[7])
 
 		donations = append(donations, &model.Donation{
-			ID:          record[0],
+			Id:          record[0],
 			Created:     created,
 			ClientName:  record[2],
 			ClientEmail: record[3],
-			PayoutID:    record[4],
+			PayoutId:    record[4],
 			Gross:       gross,
 			Fee:         fee,
 			Net:         net,

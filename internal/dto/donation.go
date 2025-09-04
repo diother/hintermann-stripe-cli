@@ -7,7 +7,7 @@ import (
 )
 
 type DonationDTO struct {
-	ID          string
+	Id          string
 	Created     string
 	ClientName  string
 	ClientEmail string
@@ -19,11 +19,11 @@ type DonationDTO struct {
 
 func FromDonation(donation *model.Donation) *DonationDTO {
 	return &DonationDTO{
-		ID:          donation.ID,
+		Id:          donation.Id,
 		Created:     donation.Created.Format("2 Jan 2006"),
 		ClientName:  donation.ClientName,
 		ClientEmail: donation.ClientEmail,
-		PayoutID:    donation.PayoutID,
+		PayoutID:    donation.PayoutId,
 		Gross:       fmt.Sprintf("%.2f lei", float64(donation.Gross)/100),
 		Fee:         fmt.Sprintf("%.2f lei", float64(donation.Fee)/100),
 		Net:         fmt.Sprintf("%.2f lei", float64(donation.Net)/100),

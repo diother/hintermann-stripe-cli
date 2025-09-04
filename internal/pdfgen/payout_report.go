@@ -14,7 +14,7 @@ func GeneratePayoutReport(payoutReport *dto.PayoutReportDTO) (string, error) {
 		return "", err
 	}
 
-	path := helper.PayoutReportPath(payoutReport.Payout.ID)
+	path := helper.PayoutReportPath(payoutReport.Payout.Id)
 	if err := helper.EnsureDir(path); err != nil {
 		return "", err
 	}
@@ -141,7 +141,7 @@ func addPayoutReportFooter(pdf *gopdf.GoPdf, currentPage, pagesNeeded int) error
 func addPayoutSummary(pdf *gopdf.GoPdf, payout *dto.PayoutDTO) {
 	const startY = 211
 
-	setText(pdf, 81, startY+10, payout.ID)
+	setText(pdf, 81, startY+10, payout.Id)
 	setText(pdf, 112, startY+26, payout.Created)
 
 	setText(pdf, 312, startY+10, "Preț brut:")
@@ -175,7 +175,7 @@ func addPayoutTable(pdf *gopdf.GoPdf, startY float64) {
 }
 
 func addPayoutItem(pdf *gopdf.GoPdf, item *dto.DonationDTO, startY float64) {
-	setText(pdf, marginLeft, startY+16, item.ID)
+	setText(pdf, marginLeft, startY+16, item.Id)
 
 	setRightAlignedText(pdf, 367, startY, item.Gross)
 	setRightAlignedText(pdf, 474, startY, "-"+item.Fee)

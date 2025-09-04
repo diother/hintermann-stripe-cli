@@ -7,7 +7,7 @@ import (
 )
 
 type PayoutDTO struct {
-	ID      string
+	Id      string
 	Created string
 	Gross   string
 	Fee     string
@@ -16,7 +16,7 @@ type PayoutDTO struct {
 
 func FromPayout(payout *model.Payout) *PayoutDTO {
 	return &PayoutDTO{
-		ID:      payout.ID,
+		Id:      payout.ID,
 		Created: payout.Created.Format("2 Jan 2006"),
 		Gross:   fmt.Sprintf("%.2f lei", float64(payout.Gross)/100),
 		Fee:     fmt.Sprintf("%.2f lei", float64(payout.Fee)/100),

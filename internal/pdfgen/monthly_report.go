@@ -183,6 +183,6 @@ func addMonthlyPayoutProduct(pdf *gopdf.GoPdf, payout *dto.PayoutDTO, startY flo
 	setRightAlignedText(pdf, marginRight, startY, payout.Net)
 
 	pdf.SetTextColor(0, 0, 0)
-	setText(pdf, marginLeft, startY, payout.ID)
+	setText(pdf, marginLeft, startY, payout.Id)
 	pdf.SetTextColor(94, 100, 112)
 }

@@ -14,7 +14,7 @@ func GenerateInvoice(donation *dto.DonationDTO) (string, error) {
 		return "", err
 	}
 
-	path := helper.InvoicePath(donation.PayoutID, donation.ID)
+	path := helper.InvoicePath(donation.PayoutID, donation.Id)
 	if err := helper.EnsureDir(path); err != nil {
 		return "", err
 	}
@@ -57,7 +57,7 @@ func addInvoiceHeader(pdf *gopdf.GoPdf, donation *dto.DonationDTO) error {
 	setText(pdf, marginLeft, startY+111, "România")
 
 	setText(pdf, 312, startY+31, "ID tranzacție:")
-	setRightAlignedText(pdf, marginRight, startY+31, donation.ID)
+	setRightAlignedText(pdf, marginRight, startY+31, donation.Id)
 	setText(pdf, 312, startY+47, "Data emiterii:")
 	setRightAlignedText(pdf, marginRight, startY+47, donation.Created)
 	setText(pdf, 312, startY+63, "Nume client:")
