@@ -51,6 +51,9 @@ func validateStripePayout(payout *stripe.Payout) error {
 	if payout.ID == "" {
 		return fmt.Errorf("id missing")
 	}
+	if payout.Created <= 0 {
+		return fmt.Errorf("created invalid")
+	}
 	if payout.Status != "paid" {
 		return fmt.Errorf("status invalid")
 	}
