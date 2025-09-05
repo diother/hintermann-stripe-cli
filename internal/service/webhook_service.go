@@ -72,7 +72,7 @@ func validateStripePayout(payout *stripe.Payout) error {
 		return fmt.Errorf("is nil")
 	}
 	if payout.ID == "" {
-		return fmt.Errorf("id missing")
+		return fmt.Errorf("id is missing")
 	}
 	if payout.Created <= 0 {
 		return fmt.Errorf("created is not positive")
@@ -94,7 +94,7 @@ func validatePayoutTransaction(payout *stripe.BalanceTransaction) error {
 		return fmt.Errorf("type is not payout")
 	}
 	if payout.ID == "" {
-		return fmt.Errorf("id missing")
+		return fmt.Errorf("id is missing")
 	}
 	if payout.Created <= 0 {
 		return fmt.Errorf("created is not positive")
@@ -131,22 +131,22 @@ func validateChargeTransaction(charge *stripe.BalanceTransaction) error {
 		return fmt.Errorf("is nil")
 	}
 	if charge.Type != "charge" {
-		return fmt.Errorf("type invalid")
+		return fmt.Errorf("type is not charge")
 	}
 	if charge.ID == "" {
-		return fmt.Errorf("id missing")
+		return fmt.Errorf("id is missing")
 	}
 	if charge.Created <= 0 {
-		return fmt.Errorf("created invalid")
+		return fmt.Errorf("created is not positive")
 	}
 	if charge.Amount <= 0 {
-		return fmt.Errorf("amount invalid")
+		return fmt.Errorf("amount is not positive")
 	}
 	if charge.Fee <= 0 {
-		return fmt.Errorf("fee invalid")
+		return fmt.Errorf("fee is not positive")
 	}
 	if charge.Net <= 0 {
-		return fmt.Errorf("net invalid")
+		return fmt.Errorf("net is not positive")
 	}
 	if charge.Source == nil {
 		return fmt.Errorf("source is nil")
@@ -158,10 +158,10 @@ func validateChargeTransaction(charge *stripe.BalanceTransaction) error {
 		return fmt.Errorf("billing details is nil")
 	}
 	if charge.Source.Charge.BillingDetails.Email == "" {
-		return fmt.Errorf("email missing")
+		return fmt.Errorf("email is missing")
 	}
 	if charge.Source.Charge.BillingDetails.Name == "" {
-		return fmt.Errorf("name missing")
+		return fmt.Errorf("name is missing")
 	}
 	return nil
 }
