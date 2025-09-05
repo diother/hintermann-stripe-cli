@@ -9,7 +9,7 @@ import (
 )
 
 type Reader interface {
-	GetPayoutsByDateRange(start, end time.Time) ([]*model.Payout, error)
+	GetPayoutsByMonth(start time.Time) ([]*model.Payout, error)
 	GetPayoutById(id string) (*model.Payout, error)
 	GetDonationsByPayoutId(payoutId string) ([]*model.Donation, error)
 }
@@ -19,9 +19,9 @@ type ReportService struct {
 }
 
 func (s *ReportService) GetMonthlyReport(year int, month time.Month) (*dto.MonthlyReportDTO, error) {
-	start, end := getDateRange(year, month)
+	start := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
 
-	payouts, err := s.Repo.GetPayoutsByDateRange(start, end)
+	payouts, err := s.Repo.GetPayoutsByMonth(start)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func (s *ReportService) GetMonthlyReport(year int, month time.Month) (*dto.Month
 	gross, fee, net := getMonthlyTotals(payouts)
 	payoutDTOs := dto.FromPayouts(payouts)
 
-	return dto.FromDateTotalsAndPayoutDTOs(start, gross, fee, net, payoutDTOs), nil
+	return dto.FromMonthTotalsAndPayoutDTOs(start, gross, fee, net, payoutDTOs), nil
 }
 
 func (s *ReportService) GetPayoutReport(payoutId string) (*dto.PayoutReportDTO, []*dto.DonationDTO, error) {
@@ -57,10 +57,4 @@ func getMonthlyTotals(payouts []*model.Payout) (int, int, int) {
 		net += helper.MustAtoi(p.Net)
 	}
 	return gross, fee, net
-}
-
-func getDateRange(year int, month time.Month) (time.Time, time.Time) {
-	start := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
-	end := start.AddDate(0, 1, -1)
-	return start, end
 }

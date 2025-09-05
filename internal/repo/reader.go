@@ -16,7 +16,7 @@ const (
 
 type CSVRepo struct{}
 
-func (r *CSVRepo) GetPayoutsByDateRange(start, end time.Time) ([]*model.Payout, error) {
+func (r *CSVRepo) GetPayoutsByMonth(start time.Time) ([]*model.Payout, error) {
 	payouts, err := r.loadPayouts()
 	if err != nil {
 		return nil, err
@@ -27,6 +27,7 @@ func (r *CSVRepo) GetPayoutsByDateRange(start, end time.Time) ([]*model.Payout, 
 		if err != nil {
 			return nil, fmt.Errorf("invalid time format for %s", p.Id)
 		}
+		end := start.AddDate(0, 1, -1)
 		if (created.Equal(start) || created.After(start)) &&
 			(created.Equal(end) || created.Before(end)) {
 			filtered = append(filtered, p)

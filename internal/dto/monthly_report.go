@@ -15,10 +15,9 @@ type MonthlyReportDTO struct {
 	Payouts    []*PayoutDTO
 }
 
-func FromDateTotalsAndPayoutDTOs(date time.Time, gross, fee, net int, payoutDTOs []*PayoutDTO) *MonthlyReportDTO {
-	start := date
-	end := date.AddDate(0, 1, -1)
-	issued := date.AddDate(0, 1, 0)
+func FromMonthTotalsAndPayoutDTOs(start time.Time, gross, fee, net int, payoutDTOs []*PayoutDTO) *MonthlyReportDTO {
+	end := start.AddDate(0, 1, -1)
+	issued := start.AddDate(0, 1, 0)
 
 	return &MonthlyReportDTO{
 		MonthStart: start.Format("2 Jan 2006"),
