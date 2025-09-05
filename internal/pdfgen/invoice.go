@@ -14,7 +14,7 @@ func GenerateInvoice(donation *dto.DonationDTO) (string, error) {
 		return "", err
 	}
 
-	path := helper.InvoicePath(donation.PayoutID, donation.Id)
+	path := helper.InvoicePath(donation.PayoutId, donation.Id)
 	if err := helper.EnsureDir(path); err != nil {
 		return "", err
 	}

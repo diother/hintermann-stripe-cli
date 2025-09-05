@@ -14,17 +14,17 @@ func MonthlyReportPath(year int, month time.Month) string {
 	return filepath.Join(distDir, "monthly_reports", filename)
 }
 
-func PayoutReportDir(payoutID string) string {
-	return filepath.Join(distDir, "payout_reports", payoutID)
+func PayoutReportDir(payoutId string) string {
+	return filepath.Join(distDir, "payout_reports", payoutId)
 }
 
-func PayoutReportPath(payoutID string) string {
-	return filepath.Join(PayoutReportDir(payoutID), "payout_report.pdf")
+func PayoutReportPath(payoutId string) string {
+	return filepath.Join(PayoutReportDir(payoutId), "payout_report.pdf")
 }
 
-func InvoicePath(payoutID, donationID string) string {
-	return filepath.Join(PayoutReportDir(payoutID), "invoices",
-		fmt.Sprintf("invoice_%s.pdf", donationID))
+func InvoicePath(payoutId, donationId string) string {
+	return filepath.Join(PayoutReportDir(payoutId), "invoices",
+		fmt.Sprintf("invoice_%s.pdf", donationId))
 }
 
 func EnsureDir(path string) error {

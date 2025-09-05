@@ -5,23 +5,22 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strconv"
 
 	"github.com/diother/hintermann-stripe-cli/internal/model"
 )
 
 func (r *CSVRepo) WritePayoutAndDonations(p *model.Payout, ds []*model.Donation) error {
-	existingIDs, err := readExistingPayoutIDs(payoutsFile)
+	existingIds, err := readExistingPayoutIds(payoutsFile)
 	if err != nil {
 		return fmt.Errorf("failed to read existing payout IDs: %w", err)
 	}
 
-	if _, exists := existingIDs[p.ID]; exists {
+	if _, exists := existingIds[p.Id]; exists {
 		return nil
 	}
 
 	payoutRow := [][]string{
-		{p.ID, p.Created.Format("2006-01-02"), strconv.Itoa(p.Gross), strconv.Itoa(p.Fee), strconv.Itoa(p.Net)},
+		{p.Id, p.Created, p.Gross, p.Fee, p.Net},
 	}
 	if err := appendWithTemp(payoutsFile, payoutRow); err != nil {
 		return fmt.Errorf("failed to append payout: %w", err)
@@ -31,13 +30,13 @@ func (r *CSVRepo) WritePayoutAndDonations(p *model.Payout, ds []*model.Donation)
 	for i, d := range ds {
 		donationRows[i] = []string{
 			d.Id,
-			d.Created.Format("2006-01-02"),
+			d.Created,
 			d.ClientName,
 			d.ClientEmail,
 			d.PayoutId,
-			strconv.Itoa(d.Gross),
-			strconv.Itoa(d.Fee),
-			strconv.Itoa(d.Net),
+			d.Gross,
+			d.Fee,
+			d.Net,
 		}
 	}
 
@@ -104,7 +103,7 @@ func appendWithTemp(filename string, newRows [][]string) error {
 	return os.Rename(tmpFile, filename)
 }
 
-func readExistingPayoutIDs(filename string) (map[string]struct{}, error) {
+func readExistingPayoutIds(filename string) (map[string]struct{}, error) {
 	ids := make(map[string]struct{})
 
 	f, err := os.Open(filename)

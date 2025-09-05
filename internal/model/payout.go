@@ -1,25 +1,26 @@
 package model
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/stripe/stripe-go/v79"
 )
 
 type Payout struct {
-	ID      string
-	Created time.Time
-	Gross   int
-	Fee     int
-	Net     int
+	Id      string
+	Created string
+	Gross   string
+	Fee     string
+	Net     string
 }
 
 func FromStripePayoutAndTotals(payout *stripe.Payout, gross, fee, net int) *Payout {
 	return &Payout{
-		ID:      payout.ID,
-		Created: time.Unix(payout.Created, 0).UTC(),
-		Gross:   gross,
-		Fee:     fee,
-		Net:     net,
+		Id:      payout.ID,
+		Created: time.Unix(payout.Created, 0).UTC().Format("2 Jan 2006"),
+		Gross:   strconv.Itoa(gross),
+		Fee:     strconv.Itoa(fee),
+		Net:     strconv.Itoa(net),
 	}
 }

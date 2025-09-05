@@ -13,7 +13,7 @@ import (
 
 func main() {
 	monthly := flag.Bool("monthly", false, "Generate monthly report")
-	payoutID := flag.String("payout", "", "Generate payout report by ID")
+	payoutId := flag.String("payout", "", "Generate payout report by ID")
 	year := flag.Int("year", time.Now().Year(), "Year for monthly report")
 	month := flag.Int("month", int(time.Now().Month()), "Month for monthly report")
 	flag.Parse()
@@ -31,8 +31,8 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Println("Monthly report generated:", path)
-	} else if *payoutID != "" {
-		payoutReport, donationDTOs, err := service.GetPayoutReport(*payoutID)
+	} else if *payoutId != "" {
+		payoutReport, donationDTOs, err := service.GetPayoutReport(*payoutId)
 		if err != nil {
 			log.Fatal(err)
 		}

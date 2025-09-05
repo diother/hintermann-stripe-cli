@@ -3,6 +3,7 @@ package dto
 import (
 	"fmt"
 
+	"github.com/diother/hintermann-stripe-cli/internal/helper"
 	"github.com/diother/hintermann-stripe-cli/internal/model"
 )
 
@@ -15,12 +16,16 @@ type PayoutDTO struct {
 }
 
 func FromPayout(payout *model.Payout) *PayoutDTO {
+	g := helper.MustAtoi(payout.Gross)
+	f := helper.MustAtoi(payout.Fee)
+	n := helper.MustAtoi(payout.Net)
+
 	return &PayoutDTO{
-		Id:      payout.ID,
-		Created: payout.Created.Format("2 Jan 2006"),
-		Gross:   fmt.Sprintf("%.2f lei", float64(payout.Gross)/100),
-		Fee:     fmt.Sprintf("%.2f lei", float64(payout.Fee)/100),
-		Net:     fmt.Sprintf("%.2f lei", float64(payout.Net)/100),
+		Id:      payout.Id,
+		Created: payout.Created,
+		Gross:   fmt.Sprintf("%.2f lei", float64(g)/100),
+		Fee:     fmt.Sprintf("%.2f lei", float64(f)/100),
+		Net:     fmt.Sprintf("%.2f lei", float64(n)/100),
 	}
 }
 

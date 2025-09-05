@@ -44,25 +44,6 @@ func (s *WebhookService) HandlePayoutReconciliation(stripePayout *stripe.Payout)
 	return nil
 }
 
-func validateStripePayout(payout *stripe.Payout) error {
-	if payout == nil {
-		return fmt.Errorf("is nil")
-	}
-	if payout.ID == "" {
-		return fmt.Errorf("id missing")
-	}
-	if payout.Created <= 0 {
-		return fmt.Errorf("created invalid")
-	}
-	if payout.Status != "paid" {
-		return fmt.Errorf("status invalid")
-	}
-	if payout.ReconciliationStatus != "completed" {
-		return fmt.Errorf("reconciliation status invalid")
-	}
-	return nil
-}
-
 func fetchRelatedTransactions(id string) (*stripe.BalanceTransaction, []*stripe.BalanceTransaction, error) {
 	params := &stripe.BalanceTransactionListParams{}
 	params.Payout = &id
@@ -84,6 +65,25 @@ func fetchRelatedTransactions(id string) (*stripe.BalanceTransaction, []*stripe.
 		return nil, nil, err
 	}
 	return payout, charges, nil
+}
+
+func validateStripePayout(payout *stripe.Payout) error {
+	if payout == nil {
+		return fmt.Errorf("is nil")
+	}
+	if payout.ID == "" {
+		return fmt.Errorf("id missing")
+	}
+	if payout.Created <= 0 {
+		return fmt.Errorf("created invalid")
+	}
+	if payout.Status != "paid" {
+		return fmt.Errorf("status invalid")
+	}
+	if payout.ReconciliationStatus != "completed" {
+		return fmt.Errorf("reconciliation status invalid")
+	}
+	return nil
 }
 
 func validatePayoutTransaction(payout *stripe.BalanceTransaction) error {

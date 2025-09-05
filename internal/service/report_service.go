@@ -4,13 +4,14 @@ import (
 	"time"
 
 	"github.com/diother/hintermann-stripe-cli/internal/dto"
+	"github.com/diother/hintermann-stripe-cli/internal/helper"
 	"github.com/diother/hintermann-stripe-cli/internal/model"
 )
 
 type Reader interface {
 	GetPayoutsByDateRange(start, end time.Time) ([]*model.Payout, error)
-	GetPayoutByID(id string) (*model.Payout, error)
-	GetDonationsByPayoutID(payoutID string) ([]*model.Donation, error)
+	GetPayoutById(id string) (*model.Payout, error)
+	GetDonationsByPayoutId(payoutId string) ([]*model.Donation, error)
 }
 
 type ReportService struct {
@@ -31,13 +32,13 @@ func (s *ReportService) GetMonthlyReport(year int, month time.Month) (*dto.Month
 	return dto.FromDateTotalsAndPayoutDTOs(start, gross, fee, net, payoutDTOs), nil
 }
 
-func (s *ReportService) GetPayoutReport(payoutID string) (*dto.PayoutReportDTO, []*dto.DonationDTO, error) {
-	payout, err := s.Repo.GetPayoutByID(payoutID)
+func (s *ReportService) GetPayoutReport(payoutId string) (*dto.PayoutReportDTO, []*dto.DonationDTO, error) {
+	payout, err := s.Repo.GetPayoutById(payoutId)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	donations, err := s.Repo.GetDonationsByPayoutID(payoutID)
+	donations, err := s.Repo.GetDonationsByPayoutId(payoutId)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -51,9 +52,9 @@ func (s *ReportService) GetPayoutReport(payoutID string) (*dto.PayoutReportDTO, 
 func getMonthlyTotals(payouts []*model.Payout) (int, int, int) {
 	var gross, fee, net int
 	for _, p := range payouts {
-		gross += p.Gross
-		fee += p.Fee
-		net += p.Net
+		gross += helper.MustAtoi(p.Gross)
+		fee += helper.MustAtoi(p.Fee)
+		net += helper.MustAtoi(p.Net)
 	}
 	return gross, fee, net
 }
