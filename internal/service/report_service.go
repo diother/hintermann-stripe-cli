@@ -19,7 +19,7 @@ type ReportService struct {
 }
 
 func (s *ReportService) GetMonthlyReport(year int, month time.Month) (*dto.MonthlyReportDTO, error) {
-	start := time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
+	start := getMonthStart(year, month)
 
 	payouts, err := s.Repo.GetPayoutsByMonth(start)
 	if err != nil {
@@ -57,4 +57,7 @@ func getMonthlyTotals(payouts []*model.Payout) (int, int, int) {
 		net += helper.MustAtoi(p.Net)
 	}
 	return gross, fee, net
+}
+func getMonthStart(year int, month time.Month) time.Time {
+	return time.Date(year, month, 1, 0, 0, 0, 0, time.UTC)
 }
