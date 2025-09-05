@@ -19,17 +19,14 @@ func main() {
 	if stripeKey == "" || webhookSecret == "" {
 		log.Fatal("stripe keys missing")
 	}
-
 	stripe.Key = stripeKey
 
 	repo := &repo.CSVRepo{}
 	service := &service.WebhookService{Repo: repo}
-
 	handler := &handler.WebhookHandler{
 		Service:       service,
 		WebhookSecret: webhookSecret,
 	}
-
 	http.Handle("/webhook", handler)
 
 	fmt.Println("listening on :8080")
