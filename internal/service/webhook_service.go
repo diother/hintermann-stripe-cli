@@ -75,13 +75,13 @@ func validateStripePayout(payout *stripe.Payout) error {
 		return fmt.Errorf("id missing")
 	}
 	if payout.Created <= 0 {
-		return fmt.Errorf("created invalid")
+		return fmt.Errorf("created is not positive")
 	}
 	if payout.Status != "paid" {
-		return fmt.Errorf("status invalid")
+		return fmt.Errorf("status is not paid")
 	}
 	if payout.ReconciliationStatus != "completed" {
-		return fmt.Errorf("reconciliation status invalid")
+		return fmt.Errorf("reconciliation status is not completed")
 	}
 	return nil
 }
@@ -91,22 +91,22 @@ func validatePayoutTransaction(payout *stripe.BalanceTransaction) error {
 		return fmt.Errorf("is nil")
 	}
 	if payout.Type != "payout" {
-		return fmt.Errorf("type invalid")
+		return fmt.Errorf("type is not payout")
 	}
 	if payout.ID == "" {
 		return fmt.Errorf("id missing")
 	}
 	if payout.Created <= 0 {
-		return fmt.Errorf("created invalid")
+		return fmt.Errorf("created is not positive")
 	}
 	if payout.Amount >= 0 {
-		return fmt.Errorf("amount invalid")
+		return fmt.Errorf("amount is not negative")
 	}
 	if payout.Fee != 0 {
-		return fmt.Errorf("fee invalid")
+		return fmt.Errorf("fee is not 0")
 	}
 	if payout.Net >= 0 {
-		return fmt.Errorf("net invalid")
+		return fmt.Errorf("net is not negative")
 	}
 	return nil
 }
