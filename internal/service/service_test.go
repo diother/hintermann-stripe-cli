@@ -162,7 +162,6 @@ func TestValidateChargeTransaction(t *testing.T) {
 				Charge: &stripe.Charge{
 					BillingDetails: &stripe.ChargeBillingDetails{
 						Email: "test@gmail.com",
-						Name:  "John Doe",
 					},
 				},
 			},
@@ -236,22 +235,6 @@ func TestValidateChargeTransaction(t *testing.T) {
 				},
 			},
 		}, "email is missing",
-		},
-		"nameMissing": {&stripe.BalanceTransaction{
-			Type:    "charge",
-			ID:      "test_id",
-			Created: 123,
-			Amount:  100,
-			Fee:     10,
-			Net:     90,
-			Source: &stripe.BalanceTransactionSource{
-				Charge: &stripe.Charge{
-					BillingDetails: &stripe.ChargeBillingDetails{
-						Email: "test@gmail.com",
-					},
-				},
-			},
-		}, "name is missing",
 		},
 	}
 	for name, tc := range testCases {

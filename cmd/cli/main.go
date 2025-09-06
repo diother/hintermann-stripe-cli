@@ -18,7 +18,10 @@ func main() {
 	month := flag.Int("month", int(time.Now().Month()), "Month for monthly report")
 	flag.Parse()
 
-	repo := &repo.CSVRepo{}
+	repo := &repo.CSVRepo{
+		DonationsFile: "data/donations.csv",
+		PayoutsFile:   "data/payouts.csv",
+	}
 	service := &service.ReportService{Repo: repo}
 
 	if *monthly {

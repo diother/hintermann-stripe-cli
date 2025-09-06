@@ -160,9 +160,6 @@ func validateChargeTransaction(charge *stripe.BalanceTransaction) error {
 	if charge.Source.Charge.BillingDetails.Email == "" {
 		return fmt.Errorf("email is missing")
 	}
-	if charge.Source.Charge.BillingDetails.Name == "" {
-		return fmt.Errorf("name is missing")
-	}
 	return nil
 }
 
