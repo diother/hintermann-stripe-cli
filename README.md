@@ -1,0 +1,6 @@
+### Environment variables for webhook
+```
+export STRIPE_SECRET=sk_test_...
+export WEBHOOK_SECRET=whsec_...
+export DATA_DIR=./data
+```

@@ -10,7 +10,7 @@ import (
 )
 
 func (r *CSVRepo) WritePayoutAndDonations(p *model.Payout, ds []*model.Donation) error {
-	existingIds, err := readExistingPayoutIds(payoutsFile)
+	existingIds, err := readExistingPayoutIds(r.PayoutsFile)
 	if err != nil {
 		return fmt.Errorf("failed to read existing payout IDs: %w", err)
 	}
@@ -22,7 +22,7 @@ func (r *CSVRepo) WritePayoutAndDonations(p *model.Payout, ds []*model.Donation)
 	payoutRow := [][]string{
 		{p.Id, p.Created, p.Gross, p.Fee, p.Net},
 	}
-	if err := appendWithTemp(payoutsFile, payoutRow); err != nil {
+	if err := appendWithTemp(r.PayoutsFile, payoutRow); err != nil {
 		return fmt.Errorf("failed to append payout: %w", err)
 	}
 
@@ -40,7 +40,7 @@ func (r *CSVRepo) WritePayoutAndDonations(p *model.Payout, ds []*model.Donation)
 		}
 	}
 
-	if err := appendWithTemp(donationsFile, donationRows); err != nil {
+	if err := appendWithTemp(r.DonationsFile, donationRows); err != nil {
 		return fmt.Errorf("failed to append donations: %w", err)
 	}
 

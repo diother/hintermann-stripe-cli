@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"github.com/diother/hintermann-stripe-cli/internal/handler"
 	"github.com/diother/hintermann-stripe-cli/internal/repo"
@@ -15,13 +16,17 @@ import (
 func main() {
 	stripeKey := os.Getenv("STRIPE_SECRET")
 	webhookSecret := os.Getenv("WEBHOOK_SECRET")
+	dataDir := os.Getenv("DATA_DIR")
 
-	if stripeKey == "" || webhookSecret == "" {
-		log.Fatal("stripe keys missing")
+	if stripeKey == "" || webhookSecret == "" || dataDir == "" {
+		log.Fatal("env variables are missing")
 	}
 	stripe.Key = stripeKey
 
-	repo := &repo.CSVRepo{}
+	repo := &repo.CSVRepo{
+		DonationsFile: filepath.Join(dataDir, "donations.csv"),
+		PayoutsFile:   filepath.Join(dataDir, "payouts.csv"),
+	}
 	service := &service.WebhookService{Repo: repo}
 	handler := &handler.WebhookHandler{
 		Service:       service,
