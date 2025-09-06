@@ -168,7 +168,7 @@ func TestValidateChargeTransaction(t *testing.T) {
 		}, "",
 		},
 		"nilCharge":     {nil, "is nil"},
-		"typeNotCharge": {&stripe.BalanceTransaction{}, "type is not charge"},
+		"typeNotCharge": {&stripe.BalanceTransaction{}, "type is not charge or payment"},
 		"idMissing":     {&stripe.BalanceTransaction{Type: "charge"}, "id is missing"},
 		"createdNotPositive": {
 			&stripe.BalanceTransaction{Type: "charge", ID: "test_id"},

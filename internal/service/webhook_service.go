@@ -130,8 +130,8 @@ func validateChargeTransaction(charge *stripe.BalanceTransaction) error {
 	if charge == nil {
 		return fmt.Errorf("is nil")
 	}
-	if charge.Type != "charge" {
-		return fmt.Errorf("type is not charge")
+	if charge.Type != "charge" && charge.Type != "payment" {
+		return fmt.Errorf("type is not charge or payment")
 	}
 	if charge.ID == "" {
 		return fmt.Errorf("id is missing")
