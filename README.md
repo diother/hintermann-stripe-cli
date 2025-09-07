@@ -7,5 +7,8 @@ export DATA_DIR=./data
 
 ### Pulling the data from the server 
 ```
-scp -r server:/var/www/webhook.hintermann.ro/data ./data
+cd ./data
+scp server:"/var/www/webhook.hintermann.ro/data/*" ./
+git commit -am "backup $(date)" && git push
+
 ```
