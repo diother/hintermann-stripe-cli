@@ -62,19 +62,14 @@ func TestValidateStripePayout(t *testing.T) {
 		"validPayout": {&stripe.Payout{
 			ID:                   "test_id",
 			Created:              123,
-			Status:               "paid",
 			ReconciliationStatus: "completed",
 		}, "",
 		},
 		"nilPayout":            {nil, "is nil"},
 		"idMissing":            {&stripe.Payout{ID: ""}, "id is missing"},
 		"createdIsNotPositive": {&stripe.Payout{ID: "test_id"}, "created is not positive"},
-		"statusNotPaid": {
-			&stripe.Payout{ID: "test_id", Created: 123},
-			"status is not paid",
-		},
 		"reconciliationStatusNotCompleted": {
-			&stripe.Payout{ID: "test_id", Created: 123, Status: "paid"},
+			&stripe.Payout{ID: "test_id", Created: 123},
 			"reconciliation status is not completed",
 		},
 	}

@@ -77,9 +77,6 @@ func validateStripePayout(payout *stripe.Payout) error {
 	if payout.Created <= 0 {
 		return fmt.Errorf("created is not positive")
 	}
-	if payout.Status != "paid" {
-		return fmt.Errorf("status is not paid")
-	}
 	if payout.ReconciliationStatus != "completed" {
 		return fmt.Errorf("reconciliation status is not completed")
 	}
